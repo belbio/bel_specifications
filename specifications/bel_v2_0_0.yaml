@@ -705,10 +705,12 @@ functions:
         - type: Function
           position: 1
           values:
+          - geneAbundance
           - proteinAbundance
           - rnaAbundance
           - microRNAAbundance
           - complexAbundance
+          - abundance
         - type: Modifier
           position: 2
           values:
