@@ -15,7 +15,8 @@ notes:
     all functions must have at least one argument (this is required for the complexAbundance
     and compositeAbundance signatures)
   changes:
-  - Added noCorrelation relationship (BEP-0003)
+  - BEP-0003 - Added noCorrelation relationship
+  - BEP-0001 - populationAbundance
 
 functions:
   argument_types:
@@ -131,6 +132,13 @@ functions:
       - process
       description: Denotes a disease or pathology process
       name: pathology
+    populationAbundance:
+      type: primary
+      abbreviation: pop
+      categories:
+      - abundance
+      description: Denotes the abundance of a taxon.
+      name: populationAbundance
     proteinAbundance:
       type: primary
       abbreviation: p
@@ -345,6 +353,7 @@ functions:
           - geneAbundance
           - microRNAAbundance
           - rnaAbundance
+          - populationAbundance
         - multiple: true
           optional: true
           type: NSArg
@@ -372,6 +381,7 @@ functions:
           - microRNAAbundance
           - rnaAbundance
           - complexAbundance
+          - populationAbundance
         - multiple: true
           optional: true
           type: NSArg
@@ -565,6 +575,20 @@ functions:
           position: 1
           values:
           - Pathology
+    populationAbundance:
+      func_type: primary
+      name: populationAbundance
+        signatures:
+          - arguments:
+            - type: NSArg
+              position: 1
+              values:
+              - Species
+              - Cell
+            - optional: true
+              type: Modifier
+              values:
+              - location
     products:
       func_type: modifier
       name: products
@@ -712,6 +736,7 @@ functions:
           - rnaAbundance
           - microRNAAbundance
           - complexAbundance
+          - populationAbundance
           - abundance
         - type: Modifier
           position: 2
