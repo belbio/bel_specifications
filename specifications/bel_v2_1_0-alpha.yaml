@@ -578,17 +578,17 @@ functions:
     populationAbundance:
       func_type: primary
       name: populationAbundance
-        signatures:
-          - arguments:
-            - type: NSArg
-              position: 1
-              values:
-              - Species
-              - Cell
-            - optional: true
-              type: Modifier
-              values:
-              - location
+      signatures:
+        - arguments:
+          - type: NSArg
+            position: 1
+            values:
+            - Species
+            - Cell
+          - optional: true
+            type: Modifier
+            values:
+            - location
     products:
       func_type: modifier
       name: products
