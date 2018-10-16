@@ -137,7 +137,7 @@ functions:
       abbreviation: pop
       categories:
       - abundance
-      description: Denotes the abundance of a taxon.
+      description: Denotes the abundance of a taxon (species) or cell population.
       name: populationAbundance
     proteinAbundance:
       type: primary
