@@ -14,11 +14,6 @@ notes:
   - |
     all functions must have at least one argument (this is required for the complexAbundance
     and compositeAbundance signatures)
-  changes:
-  - added BEP-0001 - populationAbundance() function
-  - added BEP-0003 - noCorrelation relationship
-  - added BEP-0004 - equivalentTo relationship
-  - added BEP-0005 - regex validation of BEL namespaced entities
 
 functions:
   argument_types:
