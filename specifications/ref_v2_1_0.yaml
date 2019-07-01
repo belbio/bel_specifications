@@ -1,48 +1,12 @@
 # BEL reference information for the BEL Language website
 
-version: 2.0.0
+version: 2.1.0
 
 changes:
-  - |
-    # Changes from BEL 1.0
-
-    ## Variants
-
-    * Now represents sequence variants at DNA, RNA, and protein levels.
-
-    * Now represents multiple substitutions within the same gene/RNA/protein
-
-    * New BEL abundance modifier function variant("") / var("") is used for most variant types, replacing substitution() / sub() and truncation() / trunc(). Human Genome Variation Society (HGVS) nomenclature adopted to describe variants (Dunnen and Antonarakis, 2000) within the var("") modifier function, expanding supported types of variation to include insertions, deletions, duplications as well as non-specific variants.
-
-    * Usage of fus() changed. Instead of a modifier function for a gene/RNA/protein abundance, fus() is used to compose new entities that can be used in place of a namespace value for abundance functions.
-
-    ## Protein Cleavage Fragments
-
-    * New abundance modifier function fragment() / frag() to be used within protein abundances to specify protein fragments based on amino acid sequence range.
-
-    ## Post-Translational Protein Modifications
-
-    * The proteinModification() / pmod() abundance modifier function can now use external vocabularies (e.g., PSI-MOD) for modification types, enabling users to add types without requiring a language change.
-
-    * Now multiple pmod() expressions can be used within a protein abundance.
-
-    ## Translocations and Cellular Location
-
-    * New abundance modifier function to specify location - location() / loc().
-
-    * Change in translocation() / tloc() function format, to explicitly add BEL location functions to location arguments.
-
-    ## Activity Functions
-
-    * The ten distinct BEL activity functions, e.g., kinaseActivity() / kin(), catalyticActivity() / cat(), transcriptionalActivity() / tscript(), are consolidated to a single activity function activity() / act().
-
-    * New modifier function molecularActivity() / ma() can be used to specify specific activity types, using external vocabularies, e.g., GO Molecular Function, or a default BEL vocabulary.
-
-    ## Regulates Relationship
-
-    * New causal relationship regulates to represent cases where A is reported to affect B, but it cannot be determined if A increases or decreases B.
-
-
+  - added [BEP-0001](http://bel.bio/bep/published/BEP-0001.html) - populationAbundance() function
+  - added [BEP-0003](http://bel.bio/bep/published/BEP-0003.html) - noCorrelation relationship
+  - added [BEP-0004](http://bel.bio/bep/published/BEP-0004.html) - equivalentTo relationship
+  - added [BEP-0005](http://bel.bio/bep/published/BEP-0005.html) - Regex validation of BEL namespaced entities
 
 function_section:
   overview: |
@@ -51,7 +15,7 @@ function_section:
     abundance:
       name: abundance
       description: |
-        The following BEL Functions represent categories of abundances of specific types of biological entities like RNAs, proteins, post-translationally modified proteins, and small molecules. Biological experiments frequently involve the manipulation and measurement of entities in samples. These BEL functions specify the type of entity referred to by a namespace value. For example,geneAbundance(HGNC:AKT1), rnaAbundance(HGNC:AKT1), and proteinAbundance(HGNC:AKT1), represent the abundances of the AKT1 gene, RNA, and protein, respectively.
+        The following BEL Functions represent classes of abundances of specific types of biological entities like RNAs, proteins, post-translationally modified proteins, and small molecules. Biological experiments frequently involve the manipulation and measurement of entities in samples. These BEL functions specify the type of entity referred to by a namespace value. For example,geneAbundance(HGNC:AKT1), rnaAbundance(HGNC:AKT1), and proteinAbundance(HGNC:AKT1), represent the abundances of the AKT1 gene, RNA, and protein, respectively.
     abundance_modifier:
       name: abundance_modifier
       description: |
@@ -59,7 +23,7 @@ function_section:
     process:
       name: process
       description: |
-        The following BEL Functions represent categories of events or phenomena taking place at the level of the cell or the organism which do not correspond to molecular abundances, but instead to a biological process like angiogenesis or a pathology like cancer.
+        The following BEL Functions represent classes of events or phenomena taking place at the level of the cell or the organism which do not correspond to molecular abundances, but instead to a biological process like angiogenesis or a pathology like cancer.
     process_modifier:
       name: process_modifier
       description: Process modifier functions
@@ -97,7 +61,7 @@ function_section:
         - assertion: complex(SCOMP:"AP-1 Complex")
           description: Named complex
         - assertion: complex(p(HGNC:FOS), p(HGNC:JUN))
-          description: Complex built from list of abundance terms
+          description: complex built from list of abundance terms
 
     compositeAbundance:
       categories:
@@ -130,6 +94,35 @@ function_section:
       examples:
         - assertion: m(HGNC:MIR21)
 
+    populationAbundance:
+      categories:
+        - abundance
+
+      description: |
+        A populationAbundance function captures population changes in a taxon, e.g., a species, subspecies, or phylum, OR a cell population, e.g. adipocytes, epithelial, muscle cells.
+
+      examples:
+        - description: Penicillin decreases the population of Streptococcus entericus
+          assertion: a(CHEBI:penicillin) decreases pop(TAX:1123302)
+
+        - description: California Mule Deer increases population of gray wolves
+          assertion: pop(TAX:598490) increases pop(TAX:9612)
+
+        - description: Firmicutes bacteria increases obesity
+          assertion: pop(TAX:1239) increases path(MESH:Obesity)
+
+        - description: A heterogeneous population of microbiome bacteria
+          assertion: composite(pop(TAX:xxxx), pop(TAX:yyyy)) increases ...
+
+        - description: A drug decreases the population of adipocytes
+          assertion: a(CHEBI:metformin) decreases pop(MESH:"Adipocytes, White")
+
+        - description: P. falciparum invasion of RBCs increases malaria
+          assertion: complex(pop(NCBI:txid5833), pop(CL:erythrocyte)) increases path(DO:malaria)
+
+        - description: S. typhimurium in complex with L-ficolin (an opsonin) enhances phagocytosis [PMID:8576206]
+          assertion: complex(pop(NCBI:txid90371), p(HGNC:FCN2)) increases bp(GO:phagocytosis)
+
     proteinAbundance:
       categories:
         - abundance
@@ -155,67 +148,67 @@ function_section:
       description: |
         The `proteinModification()` or `pmod()` function can be used only as an argument within a `proteinAbundance()` function to indicate modification of the specified protein. Multiple modifications can be applied to the same protein abundance. Modified protein abundance term expressions have the general form:
 
-         p(ns:protein_value, pmod(ns:type_value, <code>, <pos>))
+         p(ns:protein_value, pmod(ns:type_value, \<code\>, \<pos\>))
 
-        `type_value` (required) is a namespace value for the type of modification , **`<code>`** (optional) is a <<Supported One- and Three-letter Amino Acid Codes, single-letter or three-letter code>> for one of the twenty standard amino acids, and `<pos>` (optional) is the position at which the modification occurs based on the reference sequence for the protein. If **`<pos>`** is omitted, then the position of the modification is unspecified. If both **`<code>`** and **`<pos>`** are omitted, then the residue and position of the modification are unspecified. NOTE - A http://wiki.openbel.org/display/BLVD/Modification+Types+Provided+in+Default+BEL+Namespace[default BEL namespace] includes commonly used protein modification types.
+        `type_value` (required) is a namespace value for the type of modification , **`<code>`** (optional) is a single-letter or three-letter code for one of the twenty standard amino acids, and `<pos>` (optional) is the position at which the modification occurs based on the reference sequence for the protein. If **`<pos>`** is omitted, then the position of the modification is unspecified. If both **`<code>`** and **`<pos>`** are omitted, then the residue and position of the modification are unspecified. NOTE - the default BEL namespace includes commonly used protein modification types.
 
         Additional modification types can be requested as needed, or an external vocabulary can be used. Like other BEL namespace values, these modification types can be equivalenced to values in other vocabularies.
 
-        |====
-        | **Label** | **Synonym**
-        | Ac | acetylation
-        | ADPRib | ADP-ribosylation, ADP-rybosylation, adenosine diphosphoribosyl
-        | Farn | farnesylation
-        | Gerger | geranylgeranylation
-        | Glyco | glycosylation
-        | Hy | hydroxylation
-        | ISG | ISGylation, ISG15-protein conjugation
-        | Me | methylation
-        | Me1 | monomethylation, mono-methylation
-        | Me2 | dimethylation, di-methylation
-        | Me3 | trimethylation, tri-methylation
-        | Myr | myristoylation
-        | Nedd | neddylation
-        | NGlyco | N-linked glycosylation
-        | NO | Nitrosylation
-        | OGlyco | O-linked glycosylation
-        | Palm | palmitoylation
-        | Ph | phosphorylation
-        | Sulf | sulfation, sulphation, sulfur addition, sulphur addition, sulfonation, sulphonation
-        | Sumo | SUMOylation
-        | Ub | ubiquitination, ubiquitinylation, ubiquitylation
-        | UbK48 | Lysine 48-linked polyubiquitination
-        | UbK63 | Lysine 63-linked polyubiquitination
-        | UbMono | monoubiquitination
-        | UbPoly | polyubiquitination
-        |====
+        ### Protein Modification Default Namespace
 
-        ===== Supported One- and Three-letter Amino Acid Codes
+        | **Label** | **Synonym**|
+        |-----------|------------|
+        | Ac | acetylation |
+        | ADPRib | ADP-ribosylation, ADP-rybosylation, adenosine diphosphoribosyl |
+        | Farn | farnesylation |
+        | Gerger | geranylgeranylation |
+        | Glyco | glycosylation |
+        | Hy | hydroxylation |
+        | ISG | ISGylation, ISG15-protein conjugation |
+        | Me | methylation |
+        | Me1 | monomethylation, mono-methylation |
+        | Me2 | dimethylation, di-methylation |
+        | Me3 | trimethylation, tri-methylation |
+        | Myr | myristoylation |
+        | Nedd | neddylation |
+        | NGlyco | N-linked glycosylation |
+        | NO | Nitrosylation |
+        | OGlyco | O-linked glycosylation |
+        | Palm | palmitoylation |
+        | Ph | phosphorylation |
+        | Sulf | sulfation, sulphation, sulfur addition, sulphur addition, sulfonation, sulphonation |
+        | Sumo | SUMOylation |
+        | Ub | ubiquitination, ubiquitinylation, ubiquitylation |
+        | UbK48 | Lysine 48-linked polyubiquitination |
+        | UbK63 | Lysine 63-linked polyubiquitination |
+        | UbMono | monoubiquitination |
+        | UbPoly | polyubiquitination |
 
+        ### Supported One- and Three-letter Amino Acid Codes
 
-        |====
-        | **Amino Acid** | **1-Letter Code** | **3-Letter Code**
-        | Alanine | A | Ala
-        | Arginine | R | Arg
-        | Asparagine | N | Asn
-        | Aspartic Acid | D | Asp
-        | Cysteine | C | Cys
-        | Glutamic Acid | E | Glu
-        | Glutamine | Q | Gln
-        | Glycine | G | Gly
-        | Histidine | H | His
-        | Isoleucine | I | Ile
-        | Leucine | L | Leu
-        | Lysine | K | Lys
-        | Methionine | M | Met
-        | Phenylalanine | F | Phe
-        | Proline | P | Pro
-        | Serine | S | Ser
-        | Threonine | T | Thr
-        | Tryptophan | W | Trp
-        | Tyrosine | Y | Tyr
-        | Valine | V | Val
-        |====
+        | **Amino Acid** | **1-Letter Code** | **3-Letter Code** |
+        | -------------- | ----------------- | ----------------- |
+        | Alanine | A | Ala |
+        | Arginine | R | Arg |
+        | Asparagine | N | Asn |
+        | Aspartic Acid | D | Asp |
+        | Cysteine | C | Cys |
+        | Glutamic Acid | E | Glu |
+        | Glutamine | Q | Gln |
+        | Glycine | G | Gly |
+        | Histidine | H | His |
+        | Isoleucine | I | Ile |
+        | Leucine | L | Leu |
+        | Lysine | K | Lys |
+        | Methionine | M | Met |
+        | Phenylalanine | F | Phe |
+        | Proline | P | Pro |
+        | Serine | S | Ser |
+        | Threonine | T | Thr |
+        | Tryptophan | W | Trp |
+        | Tyrosine | Y | Tyr |
+        | Valine | V | Val |
+
 
       examples:
         - assertion: p(HGNC:AKT1, pmod(Ph, S, 473))
@@ -382,7 +375,8 @@ function_section:
         The intent of the `cellSecretion()` function is to provide a simple, standard means of expressing a commonly represented translocation.
       examples:
         - assertion: sec(p(HGNC:RETN))
-        - description: <pre>cellSecretion(<abundance>)</pre> can be equivalently expressed as
+        - description: |
+            `cellSecretion(<abundance>` can be equivalently expressed as
           assertion: tloc(p(HGNC:RETN), fromLoc(GO:intracellular), toLoc(GO:"extracellular space"))
 
     cellSurfaceExpression:
@@ -407,7 +401,8 @@ function_section:
       examples:
 
     reaction:
-      categories: tranformation
+      categories:
+        - tranformation
       description: |
         `reaction(reactants(<abundance term list1>), products(<abundance term list2>))` denotes the frequency or abundance of events in which members of the abundances in `<abundance term list1>` (the reactants) are transformed into members of the abundances in `<abundance term list2>` (the products).
       examples:
@@ -424,11 +419,12 @@ function_section:
 
         where `ns5':v5'` is a namespace and value for the 5' fusion partner, `range5'` is the sequence coordinates of the 5' partner, `ns3':v3'` is a namespace and value for the 3' partner, and `range3'` is the sequence coordinates for the 3' partner.  Ranges need to be in quotes.
       examples:
-        - description: |
+        - assertion: r(fus(HGNC:TMPRSS2, "r.1_79", HGNC:ERG, "r.312_5034"))
+          description: |
             ## RNA abundance of fusion with known breakpoints
 
             The __r.__ designation in the range fields indicates that the numbering uses the RNA sequence as the reference. RNA sequence numbering starts at the transcription initiation site.  You use __c.___ for g() fusions and __p.___ for p() fusions.  These __r.__, __c.__, and __p.__ designations come from http://www.hgvs.org[HGVS variation description] convention.
-          assertion: r(fus(HGNC:TMPRSS2, "r.1_79", HGNC:ERG, "r.312_5034"))
+
         - description: RNA abundance of fusion with unspecified breakpoints
           assertion: r(fus(HGNC:TMPRSS2, "?", HGNC:ERG, "?"))
 
@@ -493,7 +489,8 @@ relation_section:
         For terms A and B, `A directlyIncreases B` or `A => B` indicates that
         increases in A have been observed to cause increases in B and that the
         mechanism of the causal relationship is based on physical interaction of
-        entities related to A and B. This is a direct version of the increases relationship.
+        entities related to A and B. This is a <<Direct Relationships, direct>>
+        version of the increases relationship.
 
     decreases:
       categories:
@@ -512,7 +509,7 @@ relation_section:
         - Causal
         - Direct
       description: |
-        For terms A and B, `A directlyDecreases B` or `A =| B` indicates that increases in A have been observed to cause decreases in B and that the mechanism of the causal relationship is based on physical interaction of entities related to A and B. This is a <<Direct Relationships, direct>> version of the decreases relationship.
+        For terms A and B, `A directlyDecreases B` or `A =| B` indicates that increases in A have been observed to cause decreases in B and that the mechanism of the causal relationship is based on physical interaction of entities related to A and B.
 
     rateLimitingStepOf:
       categories:
@@ -539,7 +536,7 @@ relation_section:
       categories:
         - Causal
       description: |
-        For terms A and B, `A regulates B` or `A reg B` indicate that A is reported to have an effect on B, but information is missing about whether A increases B or A decreases B. This relationship provides more information than <<Xassociation, association>>, because the upstream entity (source term) and downstream entity (target term) can be assigned.
+        For terms A and B, `A regulates B` or `A reg B` indicate that A is reported to have an effect on B, but information is missing about whether A increases B or A decreases B. This relationship provides more information than the association relationship, because the upstream entity (source term) and downstream entity (target term) can be assigned.
 
     negativeCorrelation:
       categories:
@@ -586,25 +583,15 @@ relation_section:
         - assertion: r(HGNC:AKT1) translatedTo p(HGNC:AKT1)
           description: Indicates that AKT1 protein is produced by translation of AKT1 RNA.
 
-    hasActivity:
-      categories:
-        - computed
-      description:
-        For activity relationships, `A hasActivity B` designates A as having activity indicated by B.
-
-      examples:
-        - assertion: p(HGNC:IGF1R) hasActivity act(p(HGNC:IGF1R), ma(kin))
-          description: IGF1R has kinase activity
-
     hasMember:
       categories:
-        - computed
+        - other
       description: |
         For term abundances A and B, `A hasMember B` designates B as a member class of A. A member class is a distinguished sub-class. A is defined as a group by all of the members assigned to it. The member classes may or may not be overlapping and may or may not entirely cover all instances of A. A term may not appear in both the subject and object of the same hasMember statement.
 
     hasMembers:
       categories:
-        - computed
+        - other
       description: |
         The `hasMembers` relationship is a special form which enables the assignment of multiple member classes in a single statement where the object of the statement is a set of abundance terms. A statement using `hasMembers` is exactly equivalent to multiple `hasMember` statements. A term may not appear in both the subject and object of the same `hasMembers` statement.
 
@@ -612,7 +599,7 @@ relation_section:
 
     hasComponent:
       categories:
-        - computed
+        - other
       description: |
         For complex abundance term A and abundance term B, `A hasComponent B` designates B as a component of A, that complexes that are instances of A have instances of B as possible components. Note that, the stoichiometry of A is not described, nor is it stated that B is a required component.
 
@@ -620,7 +607,7 @@ relation_section:
 
     hasComponents:
       categories:
-        - computed
+        - other
       description: |
         The `hasComponents` relationship is a special form which enables the assignment of multiple complex components in a single statement where the object of the statement is a set of abundance terms. A statement using `hasComponents` is exactly equivalent to multiple `hasComponent` statements. A term may not appear in both the subject and object of the same +hasComponents+ statement.
 
@@ -666,6 +653,46 @@ relation_section:
         - deprecated
       description: |
         For term A and process term P, `A prognosticBiomarkerFor P` indicates that changes in or detection of A is used in some way to be a prognostic biomarker for the subsequent development of pathology or biological process P. Supported in BEL 2.0, but are slated to be removed in the next major version.
+
+changes:
+  - |
+    # Changes from BEL 1.0
+
+    ## Variants
+
+    * Now represents sequence variants at DNA, RNA, and protein levels.
+
+    * Now represents multiple substitutions within the same gene/RNA/protein
+
+    * New BEL abundance modifier function variant("") / var("") is used for most variant types, replacing substitution() / sub() and truncation() / trunc(). Human Genome Variation Society (HGVS) nomenclature adopted to describe variants (Dunnen and Antonarakis, 2000) within the var("") modifier function, expanding supported types of variation to include insertions, deletions, duplications as well as non-specific variants.
+
+    * Usage of fus() changed. Instead of a modifier function for a gene/RNA/protein abundance, fus() is used to compose new entities that can be used in place of a namespace value for abundance functions.
+
+    ## Protein Cleavage Fragments
+
+    * New abundance modifier function fragment() / frag() to be used within protein abundances to specify protein fragments based on amino acid sequence range.
+
+    ## Post-Translational Protein Modifications
+
+    * The proteinModification() / pmod() abundance modifier function can now use external vocabularies (e.g., PSI-MOD) for modification types, enabling users to add types without requiring a language change.
+
+    * Now multiple pmod() expressions can be used within a protein abundance.
+
+    ## Translocations and Cellular Location
+
+    * New abundance modifier function to specify location - location() / loc().
+
+    * Change in translocation() / tloc() function format, to explicitly add BEL location functions to location arguments.
+
+    ## Activity Functions
+
+    * The ten distinct BEL activity functions, e.g., kinaseActivity() / kin(), catalyticActivity() / cat(), transcriptionalActivity() / tscript(), are consolidated to a single activity function activity() / act().
+
+    * New modifier function molecularActivity() / ma() can be used to specify specific activity types, using external vocabularies, e.g., GO Molecular Function, or a default BEL vocabulary.
+
+    ## Regulates Relationship
+
+    * New causal relationship regulates to represent cases where A is reported to affect B, but it cannot be determined if A increases or decreases B.
 
 
 
