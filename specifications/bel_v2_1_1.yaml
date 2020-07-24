@@ -413,6 +413,7 @@ functions:
                 - /[\d\_\?\*]+/
             - description: description of fragment
               type: StrArg
+              optional: true
               position: 2
               values:
                 - /.*?/
