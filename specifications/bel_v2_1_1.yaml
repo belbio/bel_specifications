@@ -401,6 +401,7 @@ functions:
                 - complexAbundance
                 - microRNAAbundance
                 - rnaAbundance
+                - abundance
     fragment:
       func_type: modifier
       name: fragment
