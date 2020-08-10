@@ -395,6 +395,7 @@ functions:
                 - complexAbundance
                 - microRNAAbundance
                 - rnaAbundance
+                - abundance
     fragment:
       func_type: modifier
       name: fragment
@@ -408,6 +409,7 @@ functions:
             - description: description of fragment
               type: StrArg
               position: 1
+              optional: true
               values:
                 - /.*?/
     fromLoc:
