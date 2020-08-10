@@ -769,26 +769,51 @@ relations:
       - causal
       - direct
       name: directlyIncreases
-    hasComponent:
-      abbreviation: hasComponent
+    hasActivity:
+      abbreviation: hasActivity
       categories:
       - computed
-      name: hasComponent
-    hasComponents:
-      abbreviation: hasComponents
+      name: hasActivity
+    hasFragment:
+      abbreviation: hasFragment
       categories:
       - computed
-      name: hasComponents
+      name: hasFragment
+    hasFusion:
+      abbreviation: hasFusion
+      categories:
+      - computed
+      name: hasFusion
+    hasLocation:
+      abbreviation: hasLocation
+      categories:
+      - computed
+      name: hasLocation
     hasMember:
       abbreviation: hasMember
       categories:
       - computed
       name: hasMember
-    hasMembers:
-      abbreviation: hasMembers
+    hasModification:
+      abbreviation: hasModification
       categories:
       - computed
-      name: hasMembers
+      name: hasModification
+    hasProduct:
+      abbreviation: hasProduct
+      categories:
+      - computed
+      name: hasProduct
+    hasReactant:
+      abbreviation: hasReactant
+      categories:
+      - computed
+      name: hasReactant
+    hasVariant:
+      abbreviation: hasVariant
+      categories:
+      - computed
+      name: hasVariant
     increases:
       abbreviation: ->
       categories:

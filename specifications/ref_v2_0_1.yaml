@@ -1,6 +1,6 @@
 # BEL reference information for the BEL Language website
 
-version: 2.0.0
+version: 2.0.1
 
 changes:
   - |
@@ -41,8 +41,6 @@ changes:
     ## Regulates Relationship
 
     * New causal relationship regulates to represent cases where A is reported to affect B, but it cannot be determined if A increases or decreases B.
-
-
 
 function_section:
   overview: |
@@ -108,7 +106,9 @@ function_section:
         The `compositeAbundance()` or `composite()` function is used to represent cases where multiple abundances synergize to produce an effect. The list is unordered, thus different orderings of the arguments should be interpreted as the same term. This function should not be used if any of the abundances alone are reported to cause the effect. `compositeAbundance()` terms should be used only as subjects of statements, not as objects.
 
       examples:
-        - assertion: composite(p(HGNC:IL6), complex(GO:"interleukin-23 complex")) increases bp(GO:"T-helper 17 cell differentiation")
+        - assertion:
+            composite(p(HGNC:IL6), complex(GO:"interleukin-23 complex")) increases bp(GO:"T-helper
+            17 cell differentiation")
           description: IL-6 and IL-23 synergistically induce Th17 differentiation.
 
     geneAbundance:
@@ -237,44 +237,118 @@ function_section:
 
       examples:
         - assertion: p(HGNC:CFTR, var("="))
-          description: reference allele - this is different than `p(HGNC:CFTR)`, the root protein abundance, which includes all variants.
+          description:
+            reference allele - this is different than `p(HGNC:CFTR)`, the root protein abundance,
+            which includes all variants.
         - assertion: p(HGNC:CFTR, var("?"))
           description: unspecified variant
         - assertion: p(HGNC:CFTR, var("p.Gly576Ala"))
           # TODO - Fix description
-          description: CFTR substitution variant Glycine 576 Alanine (HGVS __NP_000483.3:p.Gly576Ala__). Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein sequence.
+          description:
+            CFTR substitution variant Glycine 576 Alanine (HGVS __NP_000483.3:p.Gly576Ala__).
+            Because a specific position is referenced, a namespace value for a non-ambiguous
+            sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower
+            example is preferred over the HGNC gene symbol. The __p.__ within the `var("")`
+            expression indicates that the numbering is based on a protein sequence.
         - assertion: p(REF:"NP_000483.3", var("p.Gly576Ala"))
           # TODO - Fix description
-          description: CFTR substitution variant Glycine 576 Alanine (HGVS __NP_000483.3:p.Gly576Ala__). Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein sequence.
+          description:
+            CFTR substitution variant Glycine 576 Alanine (HGVS __NP_000483.3:p.Gly576Ala__).
+            Because a specific position is referenced, a namespace value for a non-ambiguous
+            sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower
+            example is preferred over the HGNC gene symbol. The __p.__ within the `var("")`
+            expression indicates that the numbering is based on a protein sequence.
         - assertion: p(HGNC:CFTR, var("p.Phe508del"))
           # TODO - Fix description
-          description: CFTR ΔF508 variant (HGVS __NP_000483.3:p.Phe508del__). Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein reference sequence.
+          description:
+            CFTR ΔF508 variant (HGVS __NP_000483.3:p.Phe508del__). Because a specific position is
+            referenced, a namespace value for a non-ambiguous sequence like the
+            http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred
+            over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the
+            numbering is based on a protein reference sequence.
         - assertion: p(REF:"NP_000483.3", var("p.Phe508del"))
           # TODO - Fix description
-          description: CFTR ΔF508 variant (HGVS __NP_000483.3:p.Phe508del__). Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein reference sequence.
+          description:
+            CFTR ΔF508 variant (HGVS __NP_000483.3:p.Phe508del__). Because a specific position is
+            referenced, a namespace value for a non-ambiguous sequence like the
+            http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred
+            over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the
+            numbering is based on a protein reference sequence.
         - assertion: p(HGNC:CFTR, var("p.Thr1220Lysfs"))
-          description: CFTR frameshift variant __(__HGVS__ NP_000483.3:p.Thr1220Lysfs*7). __Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein reference sequence.
+          description:
+            CFTR frameshift variant __(__HGVS__ NP_000483.3:p.Thr1220Lysfs*7). __Because a specific
+            position is referenced, a namespace value for a non-ambiguous sequence like the
+            http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred
+            over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the
+            numbering is based on a protein reference sequence.
         - assertion: p(REF:"NP_000483.3", var("p.Thr1220Lysfs"))
-          description: CFTR frameshift variant __(__HGVS__ NP_000483.3:p.Thr1220Lysfs*7). __Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein reference sequence.
+          description:
+            CFTR frameshift variant __(__HGVS__ NP_000483.3:p.Thr1220Lysfs*7). __Because a specific
+            position is referenced, a namespace value for a non-ambiguous sequence like the
+            http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred
+            over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the
+            numbering is based on a protein reference sequence.
         - assertion: g(SNP:rs113993960, var("delCTT"))
           description: DNA SNP CFTR frameshift at __ΔF508__
         - assertion: g(REF:"NC_000007.13", var("g.117199646_117199648delCTT"))
           description: DNA Chromosome CFTR frameshift at __ΔF508__
         - assertion: g(HGNC:CFTR, var("c.1521_1523delCTT"))
           # TODO - Fix description
-          description: DNA Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __c.__ within the `var("")` expression indicates that the numbering is based on a coding DNA reference sequence.The coding DNA reference sequence covers the part of the transcript that is translated into protein; numbering starts at the A of the initiating ATG codon, and ends at the last nucleotide of the translation stop codon.
+          description:
+            DNA Because a specific position is referenced, a namespace value for a non-ambiguous
+            sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower
+            example is preferred over the HGNC gene symbol. The __c.__ within the `var("")`
+            expression indicates that the numbering is based on a coding DNA reference sequence.The
+            coding DNA reference sequence covers the part of the transcript that is translated into
+            protein; numbering starts at the A of the initiating ATG codon, and ends at the last
+            nucleotide of the translation stop codon.
         - assertion: g(REF:"NM_000492.3", var("c.1521_1523delCTT"))
           # TODO - Fix description
-          description: DNA Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __c.__ within the `var("")` expression indicates that the numbering is based on a coding DNA reference sequence.The coding DNA reference sequence covers the part of the transcript that is translated into protein; numbering starts at the A of the initiating ATG codon, and ends at the last nucleotide of the translation stop codon.
+          description:
+            DNA Because a specific position is referenced, a namespace value for a non-ambiguous
+            sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower
+            example is preferred over the HGNC gene symbol. The __c.__ within the `var("")`
+            expression indicates that the numbering is based on a coding DNA reference sequence.The
+            coding DNA reference sequence covers the part of the transcript that is translated into
+            protein; numbering starts at the A of the initiating ATG codon, and ends at the last
+            nucleotide of the translation stop codon.
 
         - assertion: r(HGNC:CFTR, var("c.1521_1523delCTT"))
-          description: Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __c.__ within the `var("")` expression indicates that the numbering is based on a coding DNA reference sequence. The coding DNA reference sequence covers the part of the transcript that is translated into protein; numbering starts at the A of the initiating ATG codon, and ends at the last nucleotide of the translation stop codon.
+          description:
+            Because a specific position is referenced, a namespace value for a non-ambiguous
+            sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower
+            example is preferred over the HGNC gene symbol. The __c.__ within the `var("")`
+            expression indicates that the numbering is based on a coding DNA reference sequence. The
+            coding DNA reference sequence covers the part of the transcript that is translated into
+            protein; numbering starts at the A of the initiating ATG codon, and ends at the last
+            nucleotide of the translation stop codon.
         - assertion: r(REF:"NM_000492.3", var("c.1521_1523delCTT"))
-          description: Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __c.__ within the `var("")` expression indicates that the numbering is based on a coding DNA reference sequence. The coding DNA reference sequence covers the part of the transcript that is translated into protein; numbering starts at the A of the initiating ATG codon, and ends at the last nucleotide of the translation stop codon.
+          description:
+            Because a specific position is referenced, a namespace value for a non-ambiguous
+            sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower
+            example is preferred over the HGNC gene symbol. The __c.__ within the `var("")`
+            expression indicates that the numbering is based on a coding DNA reference sequence. The
+            coding DNA reference sequence covers the part of the transcript that is translated into
+            protein; numbering starts at the A of the initiating ATG codon, and ends at the last
+            nucleotide of the translation stop codon.
         - assertion: r(HGNC:CFTR, var("r.1653_1655delcuu"))
-          description: Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __r.__ within the `var("")` expression indicates that the numbering is based on an RNA reference sequence. The RNA reference sequence covers the entire transcript except for the poly A-tail; numbering starts at the transcription initiation site and ends at the transcription termination site.
+          description:
+            Because a specific position is referenced, a namespace value for a non-ambiguous
+            sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower
+            example is preferred over the HGNC gene symbol. The __r.__ within the `var("")`
+            expression indicates that the numbering is based on an RNA reference sequence. The RNA
+            reference sequence covers the entire transcript except for the poly A-tail; numbering
+            starts at the transcription initiation site and ends at the transcription termination
+            site.
         - assertion: r(REF:"NM_000492.3", var("r.1653_1655delcuu"))
-          description: Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __r.__ within the `var("")` expression indicates that the numbering is based on an RNA reference sequence. The RNA reference sequence covers the entire transcript except for the poly A-tail; numbering starts at the transcription initiation site and ends at the transcription termination site.
+          description:
+            Because a specific position is referenced, a namespace value for a non-ambiguous
+            sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower
+            example is preferred over the HGNC gene symbol. The __r.__ within the `var("")`
+            expression indicates that the numbering is based on an RNA reference sequence. The RNA
+            reference sequence covers the entire transcript except for the poly A-tail; numbering
+            starts at the transcription initiation site and ends at the transcription termination
+            site.
 
     fragment:
       categories:
@@ -309,7 +383,6 @@ function_section:
         `f(ns:v, loc(ns:v))`
 
       examples:
-
         - description: Cytoplasmic pool of AKT1 protein
           assertion: p(HGNC:AKT1, loc(MESH:Cytoplasm))
         - description: Endoplasmic Reticulum pool of Ca2+
@@ -354,7 +427,8 @@ function_section:
 
       examples:
         - assertion: act(p(HGNC:FOXO1), ma(DEFAULT:tscript))
-          description: default BEL namespace, transcriptional activity (DEFAULT namespace is optional)
+          description:
+            default BEL namespace, transcriptional activity (DEFAULT namespace is optional)
         - description: GO molecular function namespace, transcriptional activity
           assertion: act(p(HGNC:FOXO1), ma(GO:"nucleic acid binding transcription factor activity"))
         - description: default BEL namespace, kinase activity
@@ -368,7 +442,9 @@ function_section:
       description: |
         For the abundance term A, `translocation(<abundance>, fromLocation(ns1:v1), toLocation(ns2:v2))` or `tloc(<abundance>, fromLoc(ns1:v1), toLoc(ns2:v2))` denotes the frequency or number of events in which members of `<abundance>` move from the location designated by the value +v1+ in the namespace +ns1+ to the location designated by the value `v2` in the namespace `ns2`. Translocation is applied to represent events on the cellular scale, like endocytosis and movement of transcription factors from the cytoplasm to the nucleus.  Special case translocations are handled by the BEL functions: `cellSecretion()`, `cellSurfaceExpression()`.
       examples:
-        - description: endocytosis (translocation from the cell surface to the endosome) of the epidermal growth factor receptor (EGFR) protein can be represented as
+        - description:
+            endocytosis (translocation from the cell surface to the endosome) of the epidermal
+            growth factor receptor (EGFR) protein can be represented as
           assertion: tloc(p(HGNC:EGFR), fromLoc(GO:"cell surface"), toLoc(GO:endosome))
 
     cellSecretion:
@@ -410,8 +486,12 @@ function_section:
       description: |
         `reaction(reactants(<abundance term list1>), products(<abundance term list2>))` denotes the frequency or abundance of events in which members of the abundances in `<abundance term list1>` (the reactants) are transformed into members of the abundances in `<abundance term list2>` (the products).
       examples:
-        - description: The reaction in which superoxides are dismutated into oxygen and hydrogen peroxide can be represented as
-          assertion: rxn(reactants(a(CHEBI:superoxide)), products(a(CHEBI:"hydrogen peroxide"), a(CHEBI:"oxygen")))
+        - description:
+            The reaction in which superoxides are dismutated into oxygen and hydrogen peroxide can
+            be represented as
+          assertion:
+            rxn(reactants(a(CHEBI:superoxide)), products(a(CHEBI:"hydrogen peroxide"),
+            a(CHEBI:"oxygen")))
 
     fusion:
       categories:
@@ -430,8 +510,6 @@ function_section:
           assertion: r(fus(HGNC:TMPRSS2, "r.1_79", HGNC:ERG, "r.312_5034"))
         - description: RNA abundance of fusion with unspecified breakpoints
           assertion: r(fus(HGNC:TMPRSS2, "?", HGNC:ERG, "?"))
-
-
 
 relation_section:
   overview: |
@@ -523,8 +601,11 @@ relation_section:
         * A -> B
 
       examples:
-        - assertion: act(p(HGNC:HMGCR), ma(cat)) rateLimitingStepOf bp(GO:"cholesterol biosynthetic process")
-          description: The catalytic activity of HMG CoA reductase is a rate-limiting step for cholesterol biosynthesis
+        - assertion:
+            act(p(HGNC:HMGCR), ma(cat)) rateLimitingStepOf bp(GO:"cholesterol biosynthetic process")
+          description:
+            The catalytic activity of HMG CoA reductase is a rate-limiting step for cholesterol
+            biosynthesis
 
     causesNoChange:
       categories:
@@ -544,7 +625,10 @@ relation_section:
       categories:
         - correlative
       description:
-        For terms A and B, `A negativeCorrelation B` or `A neg B` indicates that changes in A and B have been observed to be negatively correlated. The order of the subject and object does not affect the interpretation of the statement, thus `B negativeCorrelation A` is equivalent to `A negativeCorrelation B`.
+        For terms A and B, `A negativeCorrelation B` or `A neg B` indicates that changes in A and B
+        have been observed to be negatively correlated. The order of the subject and object does not
+        affect the interpretation of the statement, thus `B negativeCorrelation A` is equivalent to
+        `A negativeCorrelation B`.
 
     positiveCorrelation:
       categories:
@@ -589,7 +673,8 @@ relation_section:
       categories:
         - computed
       description:
-        For activity relationships, `A hasActivity B` designates A as having activity indicated by B.
+        For activity relationships, `A hasActivity B` designates A as having activity indicated by
+        B.
 
       examples:
         - assertion: p(HGNC:IGF1R) hasActivity act(p(HGNC:IGF1R), ma(kin))
@@ -665,6 +750,3 @@ relation_section:
         - deprecated
       description: |
         For term A and process term P, `A prognosticBiomarkerFor P` indicates that changes in or detection of A is used in some way to be a prognostic biomarker for the subsequent development of pathology or biological process P. Supported in BEL 2.0, but are slated to be removed in the next major version.
-
-
-
