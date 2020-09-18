@@ -4,8 +4,7 @@ notes:
   value_specification_0:
     Function values are checked in list order. Modifiers are not order specific. They are identified
     by the modifier function signature.
-  value_specification_1:
-    Function values /<body>/ are regular expression strings for value validation
+  value_specification_1: Function values /<body>/ are regular expression strings for value validation
   function_signature_requirements:
     - |
       all required arguments in function signatures are ordered
@@ -47,14 +46,14 @@ functions:
     - Location # Cellular, Tissues, ... location of Abundance entity
   info:
     abundance:
-      type: primary
+      type: Primary
       abbreviation: a
       categories:
         - abundance
       description: Denotes the abundance of an entity.
       name: abundance
     activity:
-      type: primary
+      type: Primary
       abbreviation: act
       categories:
         - process
@@ -63,14 +62,14 @@ functions:
         molecular scale.
       name: activity
     biologicalProcess:
-      type: primary
+      type: Primary
       abbreviation: bp
       categories:
         - process
       description: Denotes a process or population of events.
       name: biologicalProcess
     cellSecretion:
-      type: primary
+      type: Primary
       abbreviation: sec
       categories:
         - transformation
@@ -79,7 +78,7 @@ functions:
         cells to regions outside of the cells.
       name: cellSecretion
     cellSurfaceExpression:
-      type: primary
+      type: Primary
       abbreviation: surf
       categories:
         - transformation
@@ -88,21 +87,21 @@ functions:
         surface of cells.
       name: cellSurfaceExpression
     complexAbundance:
-      type: primary
+      type: Primary
       abbreviation: complex
       categories:
         - abundance
       description: Denotes the abundance of a molecular complex.
       name: complexAbundance
     compositeAbundance:
-      type: primary
+      type: Primary
       abbreviation: composite
       categories:
         - abundance
       description: Denotes the frequency or abundance of events in which members are present.
       name: compositeAbundance
     degradation:
-      type: primary
+      type: Primary
       abbreviation: deg
       categories:
         - transformation
@@ -111,72 +110,71 @@ functions:
         that it is no longer a member.
       name: degradation
     geneAbundance:
-      type: primary
+      type: Primary
       abbreviation: g
       categories:
         - abundance
       description: Denotes the abundance of a gene.
       name: geneAbundance
     list:
-      type: primary
+      type: Primary
       abbreviation: list
       categories:
         - other
       description: Indicates list of entities, generally used with hasMembers relation
       name: list
     microRNAAbundance:
-      type: primary
+      type: Primary
       abbreviation: m
       categories:
         - abundance
       description: Denotes the abundance of a processed, functional microRNA
       name: microRNAAbundance
     pathology:
-      type: primary
+      type: Primary
       abbreviation: path
       categories:
         - process
       description: Denotes a disease or pathology process
       name: pathology
     populationAbundance:
-      type: primary
+      type: Primary
       abbreviation: pop
       categories:
         - abundance
       description: Denotes the abundance of a taxon (species) or cell population.
       name: populationAbundance
     proteinAbundance:
-      type: primary
+      type: Primary
       abbreviation: p
       categories:
         - abundance
       description: Denotes the abundance of a protein
       name: proteinAbundance
     reaction:
-      type: primary
+      type: Primary
       abbreviation: rxn
       categories:
         - transformation
       description: Denotes the frequency or abundance of events in a reaction
       name: reaction
     rnaAbundance:
-      type: primary
+      type: Primary
       abbreviation: r
       categories:
         - abundance
       description: Denotes the abundance of an RNA
       name: rnaAbundance
     translocation:
-      type: primary
+      type: Primary
       abbreviation: tloc
       categories:
         - transformation
-      description:
-        Denotes the frequency or abundance of events in which members move between locations
+      description: Denotes the frequency or abundance of events in which members move between locations
       name: translocation
 
     fragment:
-      type: modifier
+      type: Modifier
       abbreviation: frag
       categories:
         - abundance
@@ -185,7 +183,7 @@ functions:
       primary_function:
         - proteinAbundance
     fromLoc:
-      type: modifier
+      type: Modifier
       abbreviation: fromLoc
       categories:
         - transformation
@@ -194,7 +192,7 @@ functions:
       primary_function:
         - translocation
     fusion:
-      type: modifier
+      type: Modifier
       abbreviation: fus
       categories:
         - abundance
@@ -206,7 +204,7 @@ functions:
         - rnaAbundance
         - microRNAAbundance
     location:
-      type: modifier
+      type: Modifier
       abbreviation: loc
       categories:
         - abundance
@@ -219,7 +217,7 @@ functions:
         - microRNAAbundance
         - complexAbundance
     molecularActivity:
-      type: modifier
+      type: Modifier
       abbreviation: ma
       categories:
         - activity
@@ -228,7 +226,7 @@ functions:
       primary_function:
         - activity
     products:
-      type: modifier
+      type: Modifier
       abbreviation: products
       categories:
         - transformation
@@ -237,7 +235,7 @@ functions:
       primary_function:
         - reaction
     proteinModification:
-      type: modifier
+      type: Modifier
       abbreviation: pmod
       categories:
         - abundance
@@ -246,7 +244,7 @@ functions:
       primary_function:
         - proteinAbundance
     reactants:
-      type: modifier
+      type: Modifier
       abbreviation: reactants
       categories:
         - transformation
@@ -255,7 +253,7 @@ functions:
       primary_function:
         - reaction
     toLoc:
-      type: modifier
+      type: Modifier
       abbreviation: toLoc
       categories:
         - transformation
@@ -264,7 +262,7 @@ functions:
       primary_function:
         - translocation
     variant:
-      type: modifier
+      type: Modifier
       abbreviation: var
       categories:
         - abundance
@@ -277,7 +275,7 @@ functions:
         - rnaAbundance
   signatures:
     abundance:
-      func_type: primary
+      func_type: Primary
       name: abundance
       signatures:
         - arguments:
@@ -290,7 +288,7 @@ functions:
               values:
                 - location
     activity:
-      func_type: primary
+      func_type: Primary
       name: activity
       signatures:
         - arguments:
@@ -308,7 +306,7 @@ functions:
               values:
                 - molecularActivity
     biologicalProcess:
-      func_type: primary
+      func_type: Primary
       name: biologicalProcess
       signatures:
         - arguments:
@@ -317,7 +315,7 @@ functions:
               values:
                 - BiologicalProcess
     cellSecretion:
-      func_type: primary
+      func_type: Primary
       name: cellSecretion
       signatures:
         - arguments:
@@ -328,7 +326,7 @@ functions:
                 - complexAbundance
                 - abundance
     cellSurfaceExpression:
-      func_type: primary
+      func_type: Primary
       name: cellSurfaceExpression
       signatures:
         - arguments:
@@ -343,7 +341,7 @@ functions:
         Can have multiple, named complexes (Entities of entity_type: Complex) as
         well as multiple abundance or proteinAbundance function arguments with
         a location Modifier.
-      func_type: primary
+      func_type: Primary
       name: complexAbundance
       notes: |
         Cannot embed a complex function inside a complexAbundance function,
@@ -370,7 +368,7 @@ functions:
               values:
                 - location
     compositeAbundance:
-      func_type: primary
+      func_type: Primary
       name: compositeAbundance
       notes:
         Cannot embed a composite function inside a compositeAbundance function, you can use named
@@ -395,7 +393,7 @@ functions:
               values:
                 - Complex
     degradation:
-      func_type: primary
+      func_type: Primary
       name: degradation
       signatures:
         - arguments:
@@ -408,7 +406,7 @@ functions:
                 - rnaAbundance
                 - abundance
     fragment:
-      func_type: modifier
+      func_type: Modifier
       name: fragment
       signatures:
         - arguments:
@@ -424,7 +422,7 @@ functions:
               values:
                 - /.*?/
     fromLoc:
-      func_type: modifier
+      func_type: Modifier
       name: fromLoc
       signatures:
         - arguments:
@@ -433,7 +431,7 @@ functions:
               values:
                 - Location
     fusion:
-      func_type: modifier
+      func_type: Modifier
       name: fusion
       signatures:
         - arguments:
@@ -464,7 +462,7 @@ functions:
               values:
                 - /\S+/
     geneAbundance:
-      func_type: primary
+      func_type: Primary
       name: geneAbundance
       signatures:
         - arguments:
@@ -498,7 +496,7 @@ functions:
               values:
                 - variant
     list:
-      func_type: primary
+      func_type: Primary
       name: list
       signatures:
         - arguments:
@@ -523,7 +521,7 @@ functions:
                 - complexAbundance
                 - abundance
     location:
-      func_type: modifier
+      func_type: Modifier
       name: location
       signatures:
         - arguments:
@@ -533,7 +531,7 @@ functions:
               values:
                 - Location
     microRNAAbundance:
-      func_type: primary
+      func_type: Primary
       name: microRNAAbundance
       signatures:
         - arguments:
@@ -567,7 +565,7 @@ functions:
               values:
                 - variant
     molecularActivity:
-      func_type: modifier
+      func_type: Modifier
       name: molecularActivity
       signatures:
         - arguments:
@@ -576,7 +574,7 @@ functions:
               values:
                 - Activity
     pathology:
-      func_type: primary
+      func_type: Primary
       name: pathology
       signatures:
         - arguments:
@@ -585,7 +583,7 @@ functions:
               values:
                 - Pathology
     populationAbundance:
-      func_type: primary
+      func_type: Primary
       name: populationAbundance
       signatures:
         - arguments:
@@ -599,7 +597,7 @@ functions:
               values:
                 - location
     products:
-      func_type: modifier
+      func_type: Modifier
       name: products
       signatures:
         - arguments:
@@ -611,7 +609,7 @@ functions:
                 - rnaAbundance
                 - complexAbundance
     proteinAbundance:
-      func_type: primary
+      func_type: Primary
       name: proteinAbundance
       signatures:
         - arguments:
@@ -647,7 +645,7 @@ functions:
               values:
                 - variant
     proteinModification:
-      func_type: modifier
+      func_type: Modifier
       name: proteinModification
       signatures:
         - arguments:
@@ -667,7 +665,7 @@ functions:
               values:
                 - /\d+/
     reactants:
-      func_type: modifier
+      func_type: Modifier
       name: reactants
       signatures:
         - arguments:
@@ -679,7 +677,7 @@ functions:
                 - rnaAbundance
                 - complexAbundance
     reaction:
-      func_type: primary
+      func_type: Primary
       name: reaction
       signatures:
         - arguments:
@@ -692,7 +690,7 @@ functions:
               values:
                 - products
     rnaAbundance:
-      func_type: primary
+      func_type: Primary
       name: rnaAbundance
       signatures:
         - arguments:
@@ -726,7 +724,7 @@ functions:
               values:
                 - variant
     toLoc:
-      func_type: modifier
+      func_type: Modifier
       name: toLoc
       signatures:
         - arguments:
@@ -735,7 +733,7 @@ functions:
               values:
                 - Location
     translocation:
-      func_type: primary
+      func_type: Primary
       name: translocation
       signatures:
         - arguments:
@@ -758,7 +756,7 @@ functions:
               values:
                 - toLoc
     variant:
-      func_type: modifier
+      func_type: Modifier
       name: variant
       signatures:
         - arguments:
@@ -894,7 +892,7 @@ relations:
         - genomic
       name: transcribedTo
     translatedTo:
-      abbreviation: '>>'
+      abbreviation: ">>"
       categories:
         - genomic
       name: translatedTo
@@ -931,7 +929,7 @@ namespaces:
       - name: N-linked glycosylation
         abbreviation: NGlyco
       - name: Nitrosylation
-        abbreviation: 'NO'
+        abbreviation: "NO"
       - name: O-linked glycosylation
         abbreviation: OGlyco
       - name: palmitoylation
@@ -1073,57 +1071,57 @@ computed_signatures:
     trigger_function:
       - degradation
     examples:
-      - given_statement: 'deg(r(HGNC:MYC))'
+      - given_statement: "deg(r(HGNC:MYC))"
         computed:
-          - 'deg(r(HGNC:MYC)) decreases r(HGNC:MYC)'
+          - "deg(r(HGNC:MYC)) decreases r(HGNC:MYC)"
 
   activity:
     trigger: [activity]
-    subject: '{{ arguments[f] }}'
+    subject: "{{ arguments[f] }}"
     relation: hasActivity
-    object: '{{ full }}'
+    object: "{{ full }}"
 
   variant:
     trigger: [variant]
-    subject: '{{ p_name(p_arguments[n]) }}'
+    subject: "{{ p_name(p_arguments[n]) }}"
     relation: hasVariant
-    object: '{{ p_full }}'
+    object: "{{ p_full }}"
 
   fusion:
     trigger: [fusion]
-    subject: '{{ p_name(arguments[n]) }}'
+    subject: "{{ p_name(arguments[n]) }}"
     relation: hasFusion
-    object: '{{ p_full }}'
+    object: "{{ p_full }}"
 
   proteinModification:
     trigger: [proteinModification]
-    subject: '{{ p_name(p_arguments[n]) }}'
+    subject: "{{ p_name(p_arguments[n]) }}"
     relation: hasModification
-    object: '{{ p_full }}'
+    object: "{{ p_full }}"
 
   reactants:
     trigger: [reactants]
-    subject: '{{ p_full }}'
+    subject: "{{ p_full }}"
     relation: hasReactant
-    object: '{{ arguments }}'
+    object: "{{ arguments }}"
 
   products:
     trigger: [products]
-    subject: '{{ p_full }}'
+    subject: "{{ p_full }}"
     relation: hasProduct
-    object: '{{ arguments }}'
+    object: "{{ arguments }}"
 
   composite:
     trigger: [composite]
-    subject: '{{ full }}'
+    subject: "{{ full }}"
     relation: hasMember
-    object: '{{ arguments }}'
+    object: "{{ arguments }}"
 
   complex:
     trigger: [complex]
-    subject: '{{ full }}'
+    subject: "{{ full }}"
     relation: hasComponent
-    object: '{{ arguments }}'
+    object: "{{ arguments }}"
   # Need to expand list out as primary statements
   # list:
   #  trigger: [list]
