@@ -10,7 +10,46 @@ changes:
   - |
     2.1.2 changed signature position index numbers to start from 0 instead of 1 to correspond 
     to standard programming languages since they are generally only used programmatically.
-  
+  - |
+    # Changes from BEL 1.0
+
+    ## Variants
+
+    * Now represents sequence variants at DNA, RNA, and protein levels.
+
+    * Now represents multiple substitutions within the same gene/RNA/protein
+
+    * New BEL abundance modifier function variant("") / var("") is used for most variant types, replacing substitution() / sub() and truncation() / trunc(). Human Genome Variation Society (HGVS) nomenclature adopted to describe variants (Dunnen and Antonarakis, 2000) within the var("") modifier function, expanding supported types of variation to include insertions, deletions, duplications as well as non-specific variants.
+
+    * Usage of fus() changed. Instead of a modifier function for a gene/RNA/protein abundance, fus() is used to compose new entities that can be used in place of a namespace value for abundance functions.
+
+    ## Protein Cleavage Fragments
+
+    * New abundance modifier function fragment() / frag() to be used within protein abundances to specify protein fragments based on amino acid sequence range.
+
+    ## Post-Translational Protein Modifications
+
+    * The proteinModification() / pmod() abundance modifier function can now use external vocabularies (e.g., PSI-MOD) for modification types, enabling users to add types without requiring a language change.
+
+    * Now multiple pmod() expressions can be used within a protein abundance.
+
+    ## Translocations and Cellular Location
+
+    * New abundance modifier function to specify location - location() / loc().
+
+    * Change in translocation() / tloc() function format, to explicitly add BEL location functions to location arguments.
+
+    ## Activity Functions
+
+    * The ten distinct BEL activity functions, e.g., kinaseActivity() / kin(), catalyticActivity() / cat(), transcriptionalActivity() / tscript(), are consolidated to a single activity function activity() / act().
+
+    * New modifier function molecularActivity() / ma() can be used to specify specific activity types, using external vocabularies, e.g., GO Molecular Function, or a default BEL vocabulary.
+
+    ## Regulates Relationship
+
+    * New causal relationship regulates to represent cases where A is reported to affect B, but it cannot be determined if A increases or decreases B.
+
+
 function_section:
   overview: |
     This section provides a listing and explanation of all BEL functions that are included in the BEL v2.0 Language Specification.
@@ -32,7 +71,7 @@ function_section:
       description: Process modifier functions
 
     transformation:
-      name: tranformation
+      name: transformation
       description: |
         The following BEL functions represent transformations. Transformations are processes or events in which one class of abundance is transformed or changed into a second class of abundance by translocation, degradation, or participation in a reaction. All types of abundance terms except compositeAbundance() may be used within these transformation functions.
 
@@ -559,6 +598,12 @@ relation_section:
       description: |
         For terms A and B, `A association B` or `A -- B` indicates that A and B are associated in an unspecified manner. This relationship is used when not enough information about the association is available to describe it using more specific relationships, like `increases` or `positiveCorrelation`. The order of the subject and object does not affect the interpretation of the statement, thus `B -- A` is equivalent to `A -- B`.
 
+    equivalentTo:
+      categories:
+        - correlative
+      description: |
+        For terms A and B, `A equivalentTo` or `A eq B` indicates that A and B are equivalent. This relationship is non-directional `A eq B` is the same as `B eq A`.
+    
     orthologous:
       categories:
         - genomic
@@ -656,43 +701,3 @@ relation_section:
         - deprecated
       description: |
         For term A and process term P, `A prognosticBiomarkerFor P` indicates that changes in or detection of A is used in some way to be a prognostic biomarker for the subsequent development of pathology or biological process P. Supported in BEL 2.0, but are slated to be removed in the next major version.
-
-changes:
-  - |
-    # Changes from BEL 1.0
-
-    ## Variants
-
-    * Now represents sequence variants at DNA, RNA, and protein levels.
-
-    * Now represents multiple substitutions within the same gene/RNA/protein
-
-    * New BEL abundance modifier function variant("") / var("") is used for most variant types, replacing substitution() / sub() and truncation() / trunc(). Human Genome Variation Society (HGVS) nomenclature adopted to describe variants (Dunnen and Antonarakis, 2000) within the var("") modifier function, expanding supported types of variation to include insertions, deletions, duplications as well as non-specific variants.
-
-    * Usage of fus() changed. Instead of a modifier function for a gene/RNA/protein abundance, fus() is used to compose new entities that can be used in place of a namespace value for abundance functions.
-
-    ## Protein Cleavage Fragments
-
-    * New abundance modifier function fragment() / frag() to be used within protein abundances to specify protein fragments based on amino acid sequence range.
-
-    ## Post-Translational Protein Modifications
-
-    * The proteinModification() / pmod() abundance modifier function can now use external vocabularies (e.g., PSI-MOD) for modification types, enabling users to add types without requiring a language change.
-
-    * Now multiple pmod() expressions can be used within a protein abundance.
-
-    ## Translocations and Cellular Location
-
-    * New abundance modifier function to specify location - location() / loc().
-
-    * Change in translocation() / tloc() function format, to explicitly add BEL location functions to location arguments.
-
-    ## Activity Functions
-
-    * The ten distinct BEL activity functions, e.g., kinaseActivity() / kin(), catalyticActivity() / cat(), transcriptionalActivity() / tscript(), are consolidated to a single activity function activity() / act().
-
-    * New modifier function molecularActivity() / ma() can be used to specify specific activity types, using external vocabularies, e.g., GO Molecular Function, or a default BEL vocabulary.
-
-    ## Regulates Relationship
-
-    * New causal relationship regulates to represent cases where A is reported to affect B, but it cannot be determined if A increases or decreases B.
