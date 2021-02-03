@@ -1,0 +1,705 @@
+# BEL reference information for the BEL Language website
+
+version: 2.1.3
+
+changes:
+  - 2.1.0 added [BEP-0001](http://bel.bio/bep/published/BEP-0001.html) - populationAbundance() function
+  - 2.1.0 added [BEP-0003](http://bel.bio/bep/published/BEP-0003.html) - noCorrelation relationship
+  - 2.1.0 added [BEP-0004](http://bel.bio/bep/published/BEP-0004.html) - equivalentTo relationship
+  - 2.1.0 added [BEP-0005](http://bel.bio/bep/published/BEP-0005.html) - Regex validation of BEL namespaced entities
+  - |
+    2.1.2 changed signature position index numbers to start from 0 instead of 1 to correspond 
+    to standard programming languages since they are generally only used programmatically.
+  - |
+    2.1.3 added g() to rxn() reactants() and products() as there was no real reason it should have been left out
+  - |
+    # Changes from BEL 1.0
+
+    ## Variants
+
+    * Now represents sequence variants at DNA, RNA, and protein levels.
+
+    * Now represents multiple substitutions within the same gene/RNA/protein
+
+    * New BEL abundance modifier function variant("") / var("") is used for most variant types, replacing substitution() / sub() and truncation() / trunc(). Human Genome Variation Society (HGVS) nomenclature adopted to describe variants (Dunnen and Antonarakis, 2000) within the var("") modifier function, expanding supported types of variation to include insertions, deletions, duplications as well as non-specific variants.
+
+    * Usage of fus() changed. Instead of a modifier function for a gene/RNA/protein abundance, fus() is used to compose new entities that can be used in place of a namespace value for abundance functions.
+
+    ## Protein Cleavage Fragments
+
+    * New abundance modifier function fragment() / frag() to be used within protein abundances to specify protein fragments based on amino acid sequence range.
+
+    ## Post-Translational Protein Modifications
+
+    * The proteinModification() / pmod() abundance modifier function can now use external vocabularies (e.g., PSI-MOD) for modification types, enabling users to add types without requiring a language change.
+
+    * Now multiple pmod() expressions can be used within a protein abundance.
+
+    ## Translocations and Cellular Location
+
+    * New abundance modifier function to specify location - location() / loc().
+
+    * Change in translocation() / tloc() function format, to explicitly add BEL location functions to location arguments.
+
+    ## Activity Functions
+
+    * The ten distinct BEL activity functions, e.g., kinaseActivity() / kin(), catalyticActivity() / cat(), transcriptionalActivity() / tscript(), are consolidated to a single activity function activity() / act().
+
+    * New modifier function molecularActivity() / ma() can be used to specify specific activity types, using external vocabularies, e.g., GO Molecular Function, or a default BEL vocabulary.
+
+    ## Regulates Relationship
+
+    * New causal relationship regulates to represent cases where A is reported to affect B, but it cannot be determined if A increases or decreases B.
+
+
+function_section:
+  overview: |
+    This section provides a listing and explanation of all BEL functions that are included in the BEL v2.0 Language Specification.
+  categories:
+    abundance:
+      name: abundance
+      description: |
+        The following BEL Functions represent classes of abundances of specific types of biological entities like RNAs, proteins, post-translationally modified proteins, and small molecules. Biological experiments frequently involve the manipulation and measurement of entities in samples. These BEL functions specify the type of entity referred to by a namespace value. For example,geneAbundance(HGNC:AKT1), rnaAbundance(HGNC:AKT1), and proteinAbundance(HGNC:AKT1), represent the abundances of the AKT1 gene, RNA, and protein, respectively.
+    abundance_modifier:
+      name: abundance_modifier
+      description: |
+        The following BEL functions are special functions that can be used only as an argument within an abundance function. These functions modify the abundance to specify sequence variations (gene, RNA, microRNA, protein), post-translational modifications (protein), fragment resulting from proteolytic processing (protein), or cellular location (most abundance types).
+    process:
+      name: process
+      description: |
+        The following BEL Functions represent classes of events or phenomena taking place at the level of the cell or the organism which do not correspond to molecular abundances, but instead to a biological process like angiogenesis or a pathology like cancer.
+    process_modifier:
+      name: process_modifier
+      description: Process modifier functions
+
+    transformation:
+      name: transformation
+      description: |
+        The following BEL functions represent transformations. Transformations are processes or events in which one class of abundance is transformed or changed into a second class of abundance by translocation, degradation, or participation in a reaction. All types of abundance terms except compositeAbundance() may be used within these transformation functions.
+
+    other:
+      name: other
+      description: Other functions
+
+  functions:
+    abundance:
+      categories:
+        - abundance
+      description: |
+        abundance(ns:v) or a(ns:v) denotes the abundance of the entity designated by the value v in the namespace ns. abundance is a general abundance term that can be used for chemicals or other molecules not defined by a more specific abundance function. Gene, RNA, protein, and microRNA abundances should be represented using the appropriate specific abundance function.
+      examples:
+        - assertion: a(CHEBI:"oxygen atom")
+        - assertion: a(CHEBI:thapsigargin)
+
+    complexAbundance:
+      categories:
+        - abundance
+      description: |
+        The complexAbundance() or complex() function can be used with either a namespace value or with a list of abundance terms.
+
+        complexAbundance(ns:v) or complex(ns:v) denotes the abundance of the molecular complex designated by the value v in the namespace ns. This form is generally used to identify abundances of named complexes.
+
+        complexAbundance(<abundance term list>) denotes the abundance of the molecular complex of members of the abundances denoted by <abundance term list>, a list of abundance terms supplied as arguments. The list is unordered, thus different orderings of the arguments should be interpreted as the same term. Members of a molecular complex retain their individual identities. The complexAbundance() function does not specify the duration or stability of the interaction of the members of the complex.
+
+      examples:
+        - assertion: complex(SCOMP:"AP-1 Complex")
+          description: Named complex
+        - assertion: complex(p(HGNC:FOS), p(HGNC:JUN))
+          description: complex built from list of abundance terms
+
+    compositeAbundance:
+      categories:
+        - abundance
+      description: |
+        The `compositeAbundance(<abundance term list>)` function takes a list of abundance terms.
+
+        The `compositeAbundance()` or `composite()` function is used to represent cases where multiple abundances synergize to produce an effect. The list is unordered, thus different orderings of the arguments should be interpreted as the same term. This function should not be used if any of the abundances alone are reported to cause the effect. `compositeAbundance()` terms should be used only as subjects of statements, not as objects.
+
+      examples:
+        - assertion: composite(p(HGNC:IL6), complex(GO:"interleukin-23 complex")) increases bp(GO:"T-helper 17 cell differentiation")
+          description: IL-6 and IL-23 synergistically induce Th17 differentiation.
+
+    geneAbundance:
+      categories:
+        - abundance
+      description: |
+        `geneAbundance(ns:v)` or `g(ns:v)` denotes the abundance of the gene designated by the value v in the namespace ns. `geneAbundance()` terms are used to represent the DNA encoding the specified gene. `geneAbundance()` is considered decreased in the case of a homozygous or heterozygous gene deletion, and increased in the case of a DNA amplification mutation. Events in which a protein binds to the promoter of a gene can be represented using the `geneAbundance()` function.
+
+      examples:
+        - assertion: complex(p(HGNC:TP53), g(HGNC:CDKN1A))
+          description: p53 protein binds the CDKN1A gene
+
+    microRNAAbundance:
+      categories:
+        - abundance
+      description: |
+        `microRNAAbundance(ns:v)` or `m(ns:v)` denotes the abundance of the processed, functional microRNA designated by the value +v+ in the namespace +ns+.
+
+      examples:
+        - assertion: m(HGNC:MIR21)
+
+    populationAbundance:
+      categories:
+        - abundance
+
+      description: |
+        A populationAbundance function captures population changes in a taxon, e.g., a species, subspecies, or phylum, OR a cell population, e.g. adipocytes, epithelial, muscle cells.
+
+      examples:
+        - description: Penicillin decreases the population of Streptococcus entericus
+          assertion: a(CHEBI:penicillin) decreases pop(TAX:1123302)
+
+        - description: California Mule Deer increases population of gray wolves
+          assertion: pop(TAX:598490) increases pop(TAX:9612)
+
+        - description: Firmicutes bacteria increases obesity
+          assertion: pop(TAX:1239) increases path(MESH:Obesity)
+
+        - description: A heterogeneous population of microbiome bacteria
+          assertion: composite(pop(TAX:xxxx), pop(TAX:yyyy)) increases ...
+
+        - description: A drug decreases the population of adipocytes
+          assertion: a(CHEBI:metformin) decreases pop(MESH:"Adipocytes, White")
+
+        - description: P. falciparum invasion of RBCs increases malaria
+          assertion: complex(pop(NCBI:txid5833), pop(CL:erythrocyte)) increases path(DO:malaria)
+
+        - description: S. typhimurium in complex with L-ficolin (an opsonin) enhances phagocytosis [PMID:8576206]
+          assertion: complex(pop(NCBI:txid90371), p(HGNC:FCN2)) increases bp(GO:phagocytosis)
+
+    proteinAbundance:
+      categories:
+        - abundance
+      description: |
+        `proteinAbundance(ns:v)` or `p(ns:v)` denotes the abundance of the protein designated by the value +v+ in the namespace +ns+, where +v+ references a gene or a named protein family.
+
+      examples:
+        - assertion: p(HGNC:AKT1)
+        - assertion: p(SFAM:"AKT Family")
+
+    rnaAbundance:
+      categories:
+        - abundance
+      description: |
+        `rnaAbundance(ns:v)` or `r(ns:v)` denotes the abundance of the RNA designated by the value v in the namespace +ns+, where +v+ references a gene. This function refers to all RNA designated by +ns:v+, regardless of splicing, editing, or polyadenylation stage.
+
+      examples:
+        - assertion: r(HGNC:AKT1)
+
+    proteinModification:
+      categories:
+        - abundance_modifier
+      description: |
+        The `proteinModification()` or `pmod()` function can be used only as an argument within a `proteinAbundance()` function to indicate modification of the specified protein. Multiple modifications can be applied to the same protein abundance. Modified protein abundance term expressions have the general form:
+
+         p(ns:protein_value, pmod(ns:type_value, \<code\>, \<pos\>))
+
+        `type_value` (required) is a namespace value for the type of modification , **`<code>`** (optional) is a single-letter or three-letter code for one of the twenty standard amino acids, and `<pos>` (optional) is the position at which the modification occurs based on the reference sequence for the protein. If **`<pos>`** is omitted, then the position of the modification is unspecified. If both **`<code>`** and **`<pos>`** are omitted, then the residue and position of the modification are unspecified. NOTE - the default BEL namespace includes commonly used protein modification types.
+
+        Additional modification types can be requested as needed, or an external vocabulary can be used. Like other BEL namespace values, these modification types can be equivalenced to values in other vocabularies.
+
+        ### Protein Modification Default Namespace
+
+        | **Label** | **Synonym**|
+        |-----------|------------|
+        | Ac | acetylation |
+        | ADPRib | ADP-ribosylation, ADP-rybosylation, adenosine diphosphoribosyl |
+        | Farn | farnesylation |
+        | Gerger | geranylgeranylation |
+        | Glyco | glycosylation |
+        | Hy | hydroxylation |
+        | ISG | ISGylation, ISG15-protein conjugation |
+        | Me | methylation |
+        | Me1 | monomethylation, mono-methylation |
+        | Me2 | dimethylation, di-methylation |
+        | Me3 | trimethylation, tri-methylation |
+        | Myr | myristoylation |
+        | Nedd | neddylation |
+        | NGlyco | N-linked glycosylation |
+        | NO | Nitrosylation |
+        | OGlyco | O-linked glycosylation |
+        | Palm | palmitoylation |
+        | Ph | phosphorylation |
+        | Sulf | sulfation, sulphation, sulfur addition, sulphur addition, sulfonation, sulphonation |
+        | Sumo | SUMOylation |
+        | Ub | ubiquitination, ubiquitinylation, ubiquitylation |
+        | UbK48 | Lysine 48-linked polyubiquitination |
+        | UbK63 | Lysine 63-linked polyubiquitination |
+        | UbMono | monoubiquitination |
+        | UbPoly | polyubiquitination |
+
+        ### Supported One- and Three-letter Amino Acid Codes
+
+        | **Amino Acid** | **1-Letter Code** | **3-Letter Code** |
+        | -------------- | ----------------- | ----------------- |
+        | Alanine | A | Ala |
+        | Arginine | R | Arg |
+        | Asparagine | N | Asn |
+        | Aspartic Acid | D | Asp |
+        | Cysteine | C | Cys |
+        | Glutamic Acid | E | Glu |
+        | Glutamine | Q | Gln |
+        | Glycine | G | Gly |
+        | Histidine | H | His |
+        | Isoleucine | I | Ile |
+        | Leucine | L | Leu |
+        | Lysine | K | Lys |
+        | Methionine | M | Met |
+        | Phenylalanine | F | Phe |
+        | Proline | P | Pro |
+        | Serine | S | Ser |
+        | Threonine | T | Thr |
+        | Tryptophan | W | Trp |
+        | Tyrosine | Y | Tyr |
+        | Valine | V | Val |
+
+
+      examples:
+        - assertion: p(HGNC:AKT1, pmod(Ph, S, 473))
+          description: default BEL namespace and 1-letter amino acid code
+        - assertion: p(HGNC:AKT1, pmod(Ph, Ser, 473))
+          description: default BEL namespace and 3-letter amino acid code
+        - assertion: p(HGNC:AKT1, pmod(MOD:PhosRes, Ser, 473))
+          description: |
+            [PSI-MOD](http://psidev.cvs.sourceforge.net/viewvc/psidev/psi/mod/data/PSI-MOD.obo) namespace and 3-letter amino acid code
+        - assertion: p(HGNC:MAPK1, pmod(Ph, Thr, 185), pmod(Ph, Tyr, 187))
+          description: MAPK1 phosphorylated at both Threonine 185 and Tyrosine 187
+        - assertion: p(HGNC:HRAS, pmod(Palm))
+          description: HRAS palmitoylated at an unspecified residue using default BEL namespace
+
+    variant:
+      categories:
+        - abundance_modifier
+      description: |
+        The `variant("<expression>")` or `var("<expression>")` function can be used as an argument within a `geneAbundance()`, `rnaAbundance()`, `microRNAAbundance()`, or `proteinAbundance()` to indicate a sequence variant of the specified abundance. The `var("")` function takes http://www.hgvs.org/mutnomen/[HGVS] variant description expression, e.g., for a substitution, insertion, or deletion variant. Multiple `var("")` arguments may be applied to an abundance term.
+
+      examples:
+        - assertion: p(HGNC:CFTR, var("="))
+          description: reference allele - this is different than `p(HGNC:CFTR)`, the root protein abundance, which includes all variants.
+        - assertion: p(HGNC:CFTR, var("?"))
+          description: unspecified variant
+        - assertion: p(HGNC:CFTR, var("p.Gly576Ala"))
+          # TODO - Fix description
+          description: CFTR substitution variant Glycine 576 Alanine (HGVS __NP_000483.3:p.Gly576Ala__). Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein sequence.
+        - assertion: p(REF:"NP_000483.3", var("p.Gly576Ala"))
+          # TODO - Fix description
+          description: CFTR substitution variant Glycine 576 Alanine (HGVS __NP_000483.3:p.Gly576Ala__). Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein sequence.
+        - assertion: p(HGNC:CFTR, var("p.Phe508del"))
+          # TODO - Fix description
+          description: CFTR ΔF508 variant (HGVS __NP_000483.3:p.Phe508del__). Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein reference sequence.
+        - assertion: p(REF:"NP_000483.3", var("p.Phe508del"))
+          # TODO - Fix description
+          description: CFTR ΔF508 variant (HGVS __NP_000483.3:p.Phe508del__). Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein reference sequence.
+        - assertion: p(HGNC:CFTR, var("p.Thr1220Lysfs"))
+          description: CFTR frameshift variant __(__HGVS__ NP_000483.3:p.Thr1220Lysfs*7). __Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein reference sequence.
+        - assertion: p(REF:"NP_000483.3", var("p.Thr1220Lysfs"))
+          description: CFTR frameshift variant __(__HGVS__ NP_000483.3:p.Thr1220Lysfs*7). __Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __p.__ within the `var("")` expression indicates that the numbering is based on a protein reference sequence.
+        - assertion: g(SNP:rs113993960, var("delCTT"))
+          description: DNA SNP CFTR frameshift at __ΔF508__
+        - assertion: g(REF:"NC_000007.13", var("g.117199646_117199648delCTT"))
+          description: DNA Chromosome CFTR frameshift at __ΔF508__
+        - assertion: g(HGNC:CFTR, var("c.1521_1523delCTT"))
+          # TODO - Fix description
+          description: DNA Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __c.__ within the `var("")` expression indicates that the numbering is based on a coding DNA reference sequence.The coding DNA reference sequence covers the part of the transcript that is translated into protein; numbering starts at the A of the initiating ATG codon, and ends at the last nucleotide of the translation stop codon.
+        - assertion: g(REF:"NM_000492.3", var("c.1521_1523delCTT"))
+          # TODO - Fix description
+          description: DNA Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __c.__ within the `var("")` expression indicates that the numbering is based on a coding DNA reference sequence.The coding DNA reference sequence covers the part of the transcript that is translated into protein; numbering starts at the A of the initiating ATG codon, and ends at the last nucleotide of the translation stop codon.
+
+        - assertion: r(HGNC:CFTR, var("c.1521_1523delCTT"))
+          description: Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __c.__ within the `var("")` expression indicates that the numbering is based on a coding DNA reference sequence. The coding DNA reference sequence covers the part of the transcript that is translated into protein; numbering starts at the A of the initiating ATG codon, and ends at the last nucleotide of the translation stop codon.
+        - assertion: r(REF:"NM_000492.3", var("c.1521_1523delCTT"))
+          description: Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __c.__ within the `var("")` expression indicates that the numbering is based on a coding DNA reference sequence. The coding DNA reference sequence covers the part of the transcript that is translated into protein; numbering starts at the A of the initiating ATG codon, and ends at the last nucleotide of the translation stop codon.
+        - assertion: r(HGNC:CFTR, var("r.1653_1655delcuu"))
+          description: Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __r.__ within the `var("")` expression indicates that the numbering is based on an RNA reference sequence. The RNA reference sequence covers the entire transcript except for the poly A-tail; numbering starts at the transcription initiation site and ends at the transcription termination site.
+        - assertion: r(REF:"NM_000492.3", var("r.1653_1655delcuu"))
+          description: Because a specific position is referenced, a namespace value for a non-ambiguous sequence like the http://www.ncbi.nlm.nih.gov/refseq/about/[RefSeq] ID in the lower example is preferred over the HGNC gene symbol. The __r.__ within the `var("")` expression indicates that the numbering is based on an RNA reference sequence. The RNA reference sequence covers the entire transcript except for the poly A-tail; numbering starts at the transcription initiation site and ends at the transcription termination site.
+
+    fragment:
+      categories:
+        - abundance_modifier
+      description: |
+        The `fragment()` or `frag()` function can be used within a `proteinAbundance()` term to specify a protein fragment, e.g., a product of proteolytic cleavage. Protein fragment expressions take the general form:
+
+        `p(ns:v, frag(<range>, <descriptor>))`
+
+        where `<range>` (required) is an amino acid range, and `<descriptor>` (optional) is any additional distinguishing information like fragment size or name.
+
+        For the examples, HGNC:YFG is 'your favorite gene'. For the first four examples, only the <range> argument is used. The last examples include use of the optional <descriptor>.
+
+      examples:
+        - description: fragment with known start/stop
+          assertion: p(HGNC:YFG, frag("5_20"))
+        - description: amino-terminal fragment of unknown length
+          assertion: p(HGNC:YFG, frag("1_?"))
+        - description: carboxyl-terminal fragment of unknown length
+          assertion: p(HGNC:YFG, frag("?_*"))
+        - description: fragment with unknown start/stop
+          assertion: p(HGNC:YFG, frag("?"))
+        - description: fragment with unknown start/stop and a descriptor
+          assertion: p(HGNC:YFG, frag("?", "55kD"))
+
+    location:
+      categories:
+        - abundance_modifier
+      description: |
+        location() or loc() can be used as an argument within any abundance function except compositeAbundance() to represent a distinct subset of the abundance at that location. Location subsets of abundances have the general form:
+
+        `f(ns:v, loc(ns:v))`
+
+      examples:
+
+        - description: Cytoplasmic pool of AKT1 protein
+          assertion: p(HGNC:AKT1, loc(MESH:Cytoplasm))
+        - description: Endoplasmic Reticulum pool of Ca2+
+          assertion: a(CHEBI:"calcium(2+)", loc(GO:"endoplasmic reticulum"))
+
+    biologicalProcess:
+      categories:
+        - process
+      description: |
+        `biologicalProcess(ns:v)` or `bp(ns:v)` denotes the process or population of events designated by the value v in the namespace ns.
+
+      examples:
+        - assertion: bp(GO:"cell cycle arrest")
+        - assertion: bp(GO:angiogenesis)
+
+    pathology:
+      categories:
+        - process
+      description: |
+        `pathology(ns:v)` or `path(ns:v)` denotes the disease or pathology process designated by the value +v+ in the namespace +ns+. The +pathology()` function is included to facilitate the distinction of pathologies from other biological processes because of their importance in many potential applications in the life sciences.
+
+      examples:
+        - assertion: pathology(MESH:"Pulmonary Disease, Chronic Obstructive")
+        - assertion: pathology(MESH:adenocarcinoma)
+
+    activity:
+      categories:
+        - process
+      description: |
+        `activity(<abundance>)` or `act(<abundance)` is used to specify events resulting from the molecular activity of an abundance. The `activity()` function provides distinct terms that enable differentiation of the increase or decrease of the molecular activity of a protein from changes in the abundance of the protein. `activity()` can be applied to a protein, complex, or RNA abundance term, and modified with a http://wiki.openbel.org/display/BLVD/Process+Modifier+Function#ProcessModifierFunction-ma()[molecularActivity()] argument to indicate a specific type of molecular activity.
+
+      examples:
+        - assertion: act(p(HGNC:AKT1))
+
+    molecularActivity:
+      categories:
+        - process_modifier
+      description: |
+        `molecularActivity(ns:v)` or `ma(ns:v)` is used to denote a specific type of activity function within an `activity()` term.
+
+        NOTE - The default BEL namespace (DEFAULT) includes commonly used molecular activity types, mapping directly to the BEL 1.0 activity functions.
+
+      examples:
+        - assertion: act(p(HGNC:FOXO1), ma(DEFAULT:tscript))
+          description: default BEL namespace, transcriptional activity (DEFAULT namespace is optional)
+        - description: GO molecular function namespace, transcriptional activity
+          assertion: act(p(HGNC:FOXO1), ma(GO:"nucleic acid binding transcription factor activity"))
+        - description: default BEL namespace, kinase activity
+          assertion: act(p(HGNC:AKT1), ma(kin))
+        - description: GO molecular function namespace, kinase activity
+          assertion: act(p(HGNC:AKT1), ma(GO:"kinase activity"))
+
+    translocation:
+      categories:
+        - tranformation
+      description: |
+        For the abundance term A, `translocation(<abundance>, fromLocation(ns1:v1), toLocation(ns2:v2))` or `tloc(<abundance>, fromLoc(ns1:v1), toLoc(ns2:v2))` denotes the frequency or number of events in which members of `<abundance>` move from the location designated by the value +v1+ in the namespace +ns1+ to the location designated by the value `v2` in the namespace `ns2`. Translocation is applied to represent events on the cellular scale, like endocytosis and movement of transcription factors from the cytoplasm to the nucleus.  Special case translocations are handled by the BEL functions: `cellSecretion()`, `cellSurfaceExpression()`.
+      examples:
+        - description: endocytosis (translocation from the cell surface to the endosome) of the epidermal growth factor receptor (EGFR) protein can be represented as
+          assertion: tloc(p(HGNC:EGFR), fromLoc(GO:"cell surface"), toLoc(GO:endosome))
+
+    cellSecretion:
+      categories:
+        - tranformation
+      description: |
+        For the abundance term A, `cellSecretion(<abundance>)` or `sec(<abundance>)` denotes the frequency or number of events in which members of `<abundance>` move from cells to regions outside of the cells.
+
+
+        The intent of the `cellSecretion()` function is to provide a simple, standard means of expressing a commonly represented translocation.
+      examples:
+        - assertion: sec(p(HGNC:RETN))
+        - description: |
+            `cellSecretion(<abundance>` can be equivalently expressed as
+          assertion: tloc(p(HGNC:RETN), fromLoc(GO:intracellular), toLoc(GO:"extracellular space"))
+
+    cellSurfaceExpression:
+      categories:
+        - tranformation
+      description: |
+        `cellSurfaceExpression(<abundance>)` or `surf(<abundance>)` denotes the frequency or abundance of events in which members of `<abundance>` move to the surface of cells. `cellSurfaceExpression(<abundance>)` can be equivalently expressed as:
+
+        tloc(<abundance>, fromLoc(GO:intracellular), toLoc(GO:"cell surface"))
+
+        The intent of the `cellSurfaceExpression()` function is to provide a simple, standard means of expressing a commonly represented translocation.
+      examples:
+        - assertion: surf(p(HGNC:GPER1))
+
+    degradation:
+      categories:
+        - tranformation
+      description: |
+        `degradation(<abundance>)` or `deg(<abundance>)` denotes the frequency or number of events in which a member of `<abundance>` is degraded in some way such that it is no longer a member of `<abundance>`. For example, `degradation()` is used to represent proteasome-mediated proteolysis. The BEL Framework automatically connects +deg(<abundance>)+ to `<abundance>` such that:
+
+            deg(<abundance>) directlyDecreases <abundance>
+      examples:
+
+    reaction:
+      categories:
+        - tranformation
+      description: |
+        `reaction(reactants(<abundance term list1>), products(<abundance term list2>))` denotes the frequency or abundance of events in which members of the abundances in `<abundance term list1>` (the reactants) are transformed into members of the abundances in `<abundance term list2>` (the products).
+      examples:
+        - description: The reaction in which superoxides are dismutated into oxygen and hydrogen peroxide can be represented as
+          assertion: rxn(reactants(a(CHEBI:superoxide)), products(a(CHEBI:"hydrogen peroxide"), a(CHEBI:"oxygen")))
+
+    fusion:
+      categories:
+        - other
+      description: |
+        `fusion()` or `fus()` expressions can be used in place of a namespace value within a gene, RNA, or protein abundance function to represent a hybrid gene, or gene product formed from two previously separate genes. `fusion()` expressions take the general form:
+
+            fus(ns5':v5', "range5'", ns3':v3', "range3'")
+
+        where `ns5':v5'` is a namespace and value for the 5' fusion partner, `range5'` is the sequence coordinates of the 5' partner, `ns3':v3'` is a namespace and value for the 3' partner, and `range3'` is the sequence coordinates for the 3' partner.  Ranges need to be in quotes.
+      examples:
+        - assertion: r(fus(HGNC:TMPRSS2, "r.1_79", HGNC:ERG, "r.312_5034"))
+          description: |
+            ## RNA abundance of fusion with known breakpoints
+
+            The __r.__ designation in the range fields indicates that the numbering uses the RNA sequence as the reference. RNA sequence numbering starts at the transcription initiation site.  You use __c.___ for g() fusions and __p.___ for p() fusions.  These __r.__, __c.__, and __p.__ designations come from http://www.hgvs.org[HGVS variation description] convention.
+
+        - description: RNA abundance of fusion with unspecified breakpoints
+          assertion: r(fus(HGNC:TMPRSS2, "?", HGNC:ERG, "?"))
+
+
+
+relation_section:
+  overview: |
+    The following BEL Relationship types are included in the BEL v2.0 language specification:
+
+    * Causal Relationships
+    * Correlative Relationships
+    * Genomic Relationships
+    * Other Relationships
+    * Deprecated Relationships
+
+    The most used BEL relationships should be the Causal Relationships, causal
+    and <<Correlative Relationships, correlative>> relationship categories. Relationships
+    not used in the written BEL language, but introduced by the BEL Framework
+    during compilation of a BEL network are not covered in this document.
+
+  categories:
+    causal:
+      name: causal
+      description: |
+        These relationship types denote a causal relationship, or the absence
+        of a causal relationship between a subject and an object term.
+    correlative: |
+      These relationship types link abundances and biological processes when no causal relationship is known. The order of subject and object terms does not matter in a statement with a correlative relationship, unlike a statement with a causal relationship.
+    genomic: |
+      These relationship types link related terms, like orthologous terms from two different species or the `geneAbundance()` and `rnaAbundance()` terms for the same namespace value.
+
+      ### TIP
+
+      In most cases, these relationships will be introduced by the BEL Namespace resources, and are not needed for creation of BEL Statements and BEL Documents.
+    other: |
+      Additional miscellaneous relationship types.
+
+      In most cases, these relationships will be introduced by the BEL Namespace resources, and are not needed for creation of BEL Statements and BEL Documents.
+
+    deprecated: |
+      These BEL v1.0 relationships are supported in BEL v2.0, but are slated to be removed in the next major version.
+
+  relations:
+    increases:
+      name: increases
+      categories: Causal
+      description: |
+        For terms A and B, A increases B or A → B indicate that increases in A have been observed to cause increases in B.
+
+        A increases B also represents cases where decreases in A have been observed to cause decreases in B, for example, in recording the results of gene deletion or other inhibition experiments.
+
+        A is a BEL Term and B is either a BEL Term or a BEL Statement.
+      examples:
+        - TODO
+
+    directlyIncreases:
+      name: directlyIncreases
+      categories:
+        - Causal
+        - Direct
+      description: |
+        For terms A and B, `A directlyIncreases B` or `A => B` indicates that
+        increases in A have been observed to cause increases in B and that the
+        mechanism of the causal relationship is based on physical interaction of
+        entities related to A and B. This is a <<Direct Relationships, direct>>
+        version of the increases relationship.
+
+    decreases:
+      categories:
+        - Causal
+      description: |
+        For terms A and B, `A decreases B` or `A -| B` indicate that increases in A have been observed to cause decreases in B.
+
+        `A decreases B` also represents cases where decreases in A have been observed to cause increases in B, for example, in recording the results of gene deletion or other inhibition experiments.
+
+        A is a BEL Term and B is either a BEL Term or a BEL Statement.
+
+        The `decreases` relationship does not indicate that the changes in A are either necessary for changes in B, nor does it indicate that changes in A are sufficient to cause changes in B.
+
+    directlyDecreases:
+      categories:
+        - Causal
+        - Direct
+      description: |
+        For terms A and B, `A directlyDecreases B` or `A =| B` indicates that increases in A have been observed to cause decreases in B and that the mechanism of the causal relationship is based on physical interaction of entities related to A and B.
+
+    rateLimitingStepOf:
+      categories:
+        - Causal
+      description: |
+        For process, activity, or transformation term A and process term P, `A rateLimitingStepOf P` indicates both:
+
+        * A subProcessOf B
+        * A -> B
+
+      examples:
+        - assertion: act(p(HGNC:HMGCR), ma(cat)) rateLimitingStepOf bp(GO:"cholesterol biosynthetic process")
+          description: The catalytic activity of HMG CoA reductase is a rate-limiting step for cholesterol biosynthesis
+
+    causesNoChange:
+      categories:
+        - Causal
+      description: |
+        For terms A and B, `A causesNoChange B` or `A cnc B` indicate that B was observed not to change in response to changes in A.
+
+        Statements using this relationship correspond to cases where explicit measurement of B demonstrates lack of significant change, not for cases where the state of B is unknown.
+
+    regulates:
+      categories:
+        - Causal
+      description: |
+        For terms A and B, `A regulates B` or `A reg B` indicate that A is reported to have an effect on B, but information is missing about whether A increases B or A decreases B. This relationship provides more information than the association relationship, because the upstream entity (source term) and downstream entity (target term) can be assigned.
+
+    negativeCorrelation:
+      categories:
+        - correlative
+      description:
+        For terms A and B, `A negativeCorrelation B` or `A neg B` indicates that changes in A and B have been observed to be negatively correlated. The order of the subject and object does not affect the interpretation of the statement, thus `B negativeCorrelation A` is equivalent to `A negativeCorrelation B`.
+
+    positiveCorrelation:
+      categories:
+        - correlative
+      description: |
+        For terms A and B, `A positiveCorrelation B` or `A pos B` indicates that changes in A and B have been observed to be positively correlated. The order of the subject and object does not affect the interpretation of the statement, thus `B positiveCorrelation A` is equivalent to `A positiveCorrelation B`.
+
+    association:
+      categories:
+        - correlative
+      description: |
+        For terms A and B, `A association B` or `A -- B` indicates that A and B are associated in an unspecified manner. This relationship is used when not enough information about the association is available to describe it using more specific relationships, like `increases` or `positiveCorrelation`. The order of the subject and object does not affect the interpretation of the statement, thus `B -- A` is equivalent to `A -- B`.
+
+    equivalentTo:
+      categories:
+        - correlative
+      description: |
+        For terms A and B, `A equivalentTo` or `A eq B` indicates that A and B are equivalent. This relationship is non-directional `A eq B` is the same as `B eq A`.
+    
+    orthologous:
+      categories:
+        - genomic
+      description: |
+        For terms A and B, `A orthologous B` indicates that A and B represent entities in different species which are sequence similar and which are therefore presumed to share a common ancestor. For example,
+      examples:
+        - assertion: g(HGNC:AKT1) orthologous g(MGI:AKT1)
+          description: Indicates that the mouse and human AKT1 genes are orthologs.
+
+    transcribedTo:
+      categories:
+        - genomic
+      description: |
+        For RNA abundance term R and gene abundance term G, `G transcribedTo R` or `G :> R` indicates that members of R are produced by the transcription of members of G. For example:
+      examples:
+        - assertion: g(HGNC:AKT1) transcribedTo r(HGNC:AKT1)
+          description: Indicates that the human AKT1 RNA is transcribed from the human AKT1 gene.
+
+    translatedTo:
+      categories:
+        - genomic
+      description: |
+        For RNA abundance term R and protein abundance term P, `R translatedTo P` or `R >> P` indicates that members of P are produced by the translation of members of R. For example:
+      examples:
+        - assertion: r(HGNC:AKT1) translatedTo p(HGNC:AKT1)
+          description: Indicates that AKT1 protein is produced by translation of AKT1 RNA.
+
+    hasMember:
+      categories:
+        - other
+      description: |
+        For term abundances A and B, `A hasMember B` designates B as a member class of A. A member class is a distinguished sub-class. A is defined as a group by all of the members assigned to it. The member classes may or may not be overlapping and may or may not entirely cover all instances of A. A term may not appear in both the subject and object of the same hasMember statement.
+
+    hasMembers:
+      categories:
+        - other
+      description: |
+        The `hasMembers` relationship is a special form which enables the assignment of multiple member classes in a single statement where the object of the statement is a set of abundance terms. A statement using `hasMembers` is exactly equivalent to multiple `hasMember` statements. A term may not appear in both the subject and object of the same `hasMembers` statement.
+
+        For the abundance terms A, B, C and D, `A hasMembers list(B, C, D)` indicates that A is defined by its member abundance classes B, C and D.
+
+    hasComponent:
+      categories:
+        - other
+      description: |
+        For complex abundance term A and abundance term B, `A hasComponent B` designates B as a component of A, that complexes that are instances of A have instances of B as possible components. Note that, the stoichiometry of A is not described, nor is it stated that B is a required component.
+
+        The use of `hasComponent` relationships is complementary to the use of functionally composed complexes and is intended to enable the assignment of components to complexes designated by names in external vocabularies. The assignment of components can potentially enable the reconciliation of equivalent complexes at knowledge assembly time.
+
+    hasComponents:
+      categories:
+        - other
+      description: |
+        The `hasComponents` relationship is a special form which enables the assignment of multiple complex components in a single statement where the object of the statement is a set of abundance terms. A statement using `hasComponents` is exactly equivalent to multiple `hasComponent` statements. A term may not appear in both the subject and object of the same +hasComponents+ statement.
+
+        For the abundance terms A, B, C and D, `A hasComponents list(B, C, D)` indicates that A has components B, C and D.
+
+    isA:
+      categories:
+        - other
+      description: |
+        For terms A and B, `A isA B` indicates that A is a subset of B.
+
+      examples:
+        - assertion: pathology(MESH:Psoriasis) isA pathology(MESH:"Skin Diseases")
+          description: |
+            All terms in BEL 1.0 represent classes, but given that classes implicitly have instances, `A isA B` is interpreted to mean that any instance of A must also be an instance of B. This relationship can be used to represent GO and MeSH hierarchies:
+
+    subProcessOf:
+      categories:
+        - other
+      description: |
+        For process, activity, or transformation term A and process term P, `A subProcessOf P` indicates that instances of process P, by default, include one or more instances of A in their composition.
+
+      examples:
+        - description: |
+            For example, the reduction of HMG-CoA to mevalonate is a subprocess of cholesterol biosynthesis:
+          assertion: |
+            rxn(reactants(a(CHEBI:"(S)-3-hydroxy-3-methylglutaryl-CoA"), a(CHEBI:NADPH), a(CHEBI:hydron)), products(a(CHEBI:mevalonate), a(CHEBI:"CoA-SH"), a(CHEBI:"NADP(+)"))) subProcessOf bp(GO:"cholesterol biosynthetic process")
+
+    analogous:
+      categories:
+        - deprecated
+      description: |
+        For terms A and B, `A analogousTo B` indicates that A and B represent abundances or molecular activities which function in a similar manner, but do not share sequence similarity or a common ancestor. Supported in BEL 2.0, but are slated to be removed in the next major version.
+
+    biomarkerFor:
+      categories:
+        - deprecated
+      description: |
+        For term A and process term P, `A biomarkerFor P` indicates that changes in or detection of A is used in some way to be a biomarker for pathology or biological process P. Supported in BEL 2.0, but are slated to be removed in the next major version.
+
+    prognosticBiomarkerFor:
+      categories:
+        - deprecated
+      description: |
+        For term A and process term P, `A prognosticBiomarkerFor P` indicates that changes in or detection of A is used in some way to be a prognostic biomarker for the subsequent development of pathology or biological process P. Supported in BEL 2.0, but are slated to be removed in the next major version.
