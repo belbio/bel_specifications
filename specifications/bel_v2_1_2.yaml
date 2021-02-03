@@ -644,6 +644,7 @@ functions:
               type: Modifier
               values:
                 - variant
+                - proteinModification
     proteinModification:
       func_type: Modifier
       name: proteinModification
